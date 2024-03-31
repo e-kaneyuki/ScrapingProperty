@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Scraping</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
+	<link rel="stylesheet" href="css/scraping.css" />
+     <script src="js/leaflet.js"></script>
+</head>
+<body>
+	<form th:action="@{/scraping}" method="get">
+		<label th:text="URL">URL</label>
+		<input type="text" name ="url">
+		<input type="submit" value="送信"/>
+	</form>
+	<div th:each="property, iterStat: ${propertyNameList}">
+		<div class="container">
+			<div class="left">
+				<img th:src="${photoImageList[iterStat.index]}" style="width: 150px;"></img>
+			</div>
+			<div class="center">
+				<p th:text="'物件名：'+${property}">物件名</p>
+				<p th:text="'住所：'+${addressList[iterStat.index]}">住所</p>
+				<p th:text="'経度：'+${coordinatesList[iterStat.index][0]}">経度</p>
+				<p th:text="'緯度：'+${coordinatesList[iterStat.index][1]}">緯度</p>
+				<p th:text="'情報：'+${informationList[iterStat.index]}">情報</p>
+				<p th:if="!${#lists.isEmpty(travelTimeList)}" th:text="'移動時間：'+${travelTimeList[iterStat.index]}">移動時間</p>
+			</div>
+			<div class="right">
+		    	<div class ="map" th:id="map+${iterStat.index}" th:attr="data-store-name=${property},data-latitude=${coordinatesList[iterStat.index][1]},data-longitude=${coordinatesList[iterStat.index][0]}" style="height: 20rem;"></div>
+		    </div>
+			<br>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+@charset "UTF-8";
+.container {
+	display: flex;
+}
+
+.center,.right{
+width: 40%;
+height: 30rem;
+margin:auto;
+}
+.left {
+	width: 20%;
+	height: 30rem;
+	margin:auto;	
+}
