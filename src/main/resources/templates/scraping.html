@@ -9,26 +9,35 @@
      <script src="js/leaflet.js"></script>
 </head>
 <body>
+	<p th:text="'S〇〇moの絞り込み後(建物ごとに表示)のリンクを入力してください'"></p>
+	<a th:href="@{https://suumo.jp/}" target="_blank" rel="noopener noreferrer">S〇〇mo</a>
 	<form th:action="@{/scraping}" method="get">
 		<label th:text="URL">URL</label>
 		<input type="text" name ="url">
 		<input type="submit" value="送信"/>
 	</form>
+	<div>
+		<h3 th:text="'全部で'+${totalSize}+'物件です'"></h3>
+	</div>
 	<div th:each="property, iterStat: ${propertyNameList}">
 		<div class="container">
+			
 			<div class="left">
-				<img th:src="${photoImageList[iterStat.index]}" style="width: 150px;"></img>
+				    <div th:each="imgUrlList, iterStat: ${imgUrlInclusiveList[iterStat.index]}">
+				        <div th:each="imgUrl, iterStat: ${imgUrlList}">
+				            <img th:src="${imgUrl}" style="width: 15rem;">
+				        </div>
+				    </div>
 			</div>
 			<div class="center">
 				<p th:text="'物件名：'+${property}">物件名</p>
 				<p th:text="'住所：'+${addressList[iterStat.index]}">住所</p>
-				<p th:text="'経度：'+${coordinatesList[iterStat.index][0]}">経度</p>
-				<p th:text="'緯度：'+${coordinatesList[iterStat.index][1]}">緯度</p>
-				<p th:text="'情報：'+${informationList[iterStat.index]}">情報</p>
+				<p th:utext="'情報：'+${#strings.replace(informationList[iterStat.index],'m2','m2<br>&thinsp;&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&ensp;&ensp;')}">情報</p>
+				<p th:text="'築年数：'+${ageList[iterStat.index]}">住所</p>
 				<p th:if="!${#lists.isEmpty(travelTimeList)}" th:text="'移動時間：'+${travelTimeList[iterStat.index]}">移動時間</p>
 			</div>
 			<div class="right">
-		    	<div class ="map" th:id="map+${iterStat.index}" th:attr="data-store-name=${property},data-latitude=${coordinatesList[iterStat.index][1]},data-longitude=${coordinatesList[iterStat.index][0]}" style="height: 20rem;"></div>
+		    	<div class ="map" th:id="map+${iterStat.index}" th:attr="data-store-name=${property},data-latitude=${coordinatesList[iterStat.index][1]},data-longitude=${coordinatesList[iterStat.index][0]}" style="height: 30rem;"></div>
 		    </div>
 			<br>
 		</div>

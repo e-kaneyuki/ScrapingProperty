@@ -8,8 +8,6 @@ window.addEventListener("load", function() {
         var latitude = e.getAttribute('data-latitude');
         var longitude = e.getAttribute('data-longitude');
         var shopName = e.getAttribute('data-store-name');
-//        console.log('latitude', latitude);
-//        console.log('longitude', longitude);
 
 		// 文字列から数値に変換
         var lat = parseFloat(latitude); 

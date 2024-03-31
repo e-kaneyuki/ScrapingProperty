@@ -29,22 +29,42 @@ public class ScrapingController {
 		Document doc = Jsoup.connect(linkUrl).get();
 		
 		Elements cassetteItem = doc.select(".cassetteitem");
+		int tatalSize = cassetteItem.size();
+		model.addAttribute("totalSize",tatalSize);
 		List<String> propertyNameList = new LinkedList<String>();
 		List<String> addressList = new LinkedList<String>();
+		List<String> ageList = new LinkedList<String>();
 		List<String> informationList = new LinkedList<String>();
 		List<String[]> coordinatesList = new LinkedList<String[]>();
 		List<String> travelTimeList = new LinkedList<String>();
 		List<String> photoImageList = new LinkedList<String>();
+		List<List<String>> imgUrlInclusiveList = new LinkedList<List<String>>();
 		
 		for (Element element : cassetteItem) { 
-//			System.out.println(element.text());
+
 			String propertyName = element.select(".cassetteitem_content-title").text();
 			String address = element.select(".cassetteitem_detail-col1").text();
-			String information = element.select(".js-cassette_link").text();
-//			
+			String age = element.select(".cassetteitem_detail-col3").text();
+			String information = element.select(".js-cassette_link").text()
+					.replace("追加", "")
+					.replace("詳細を見る", "")
+					.replace("お問い合わせ (無料)", "")
+					.replace("動画", "")
+					.replace("パノラマ", "");
+			Element img = element.selectFirst(".js-cassette_link").selectFirst(".casssetteitem_other-thumbnail");
+
+			String imgUrl = img.attr("data-imgs");
+			String[] imgUrlArray = imgUrl.split(",");
+			List<String> imgUrlList = new LinkedList<String>();
+			for (String urlStr : imgUrlArray) {
+				imgUrlList.add(urlStr);
+			}
+			imgUrlInclusiveList.add(imgUrlList);
+			
+			
 			Element photo = element.selectFirst(".cassetteitem_object-item").selectFirst("img");
 			String photoImage = photo.attr("rel");
-//			
+
 			if (!element.select(".cassetteitem_transfer-body").isEmpty()) {
 				String travelTime = element.select(".cassetteitem_transfer-body").text();
 				travelTimeList.add(travelTime);
@@ -53,6 +73,7 @@ public class ScrapingController {
 			
 			propertyNameList.add(propertyName);
 			addressList.add(address);
+			ageList.add(age);
 			informationList.add(information);
 			photoImageList.add(photoImage);
 			
@@ -77,12 +98,15 @@ public class ScrapingController {
 
 			coordinatesList.add(coordinatesArray);
 		}
+		
+		model.addAttribute("ageList", ageList);
 		model.addAttribute("propertyNameList", propertyNameList);
 		model.addAttribute("addressList", addressList);
 		model.addAttribute("coordinatesList", coordinatesList);
 		model.addAttribute("informationList", informationList);
 		model.addAttribute("travelTimeList", travelTimeList);
 		model.addAttribute("photoImageList", photoImageList);
+		model.addAttribute("imgUrlInclusiveList", imgUrlInclusiveList);
 		
 		return "scraping";
 		
