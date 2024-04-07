@@ -2,6 +2,7 @@
  * 
  */
 window.addEventListener("load", function() {
+	
     // 地図を表示する要素の数だけ繰り返し
     var elements = document.querySelectorAll(".map");
     elements.forEach(function(e, index) {
@@ -19,7 +20,11 @@ window.addEventListener("load", function() {
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: "© OpenStreetMap contributors"
         }).addTo(map);
+		
+		
 
+		
+		
         // マーカーを追加
         var marker = L.marker([lat, lng]).addTo(map);
         marker.bindPopup(shopName).openPopup(); 
